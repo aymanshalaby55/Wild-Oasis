@@ -8,32 +8,24 @@ import Button from "../../ui/Button";
 import FileInput from "../../ui/FileInput";
 import Textarea from "../../ui/Textarea";
 import FormRow from "../../ui/FormRow";
-import { createEditCabin } from "../../services/apiCabins";
+import { useCreateEditCabin } from "./hooks/useCreateEditCabin";
 
-function CreateCabinForm({ cabinToEdit = {} }) {
+function CreateCabinForm({ cabinToEdit = {}, onClose }) {
   const { id: editId, ...editValues } = cabinToEdit;
   const isEditSession = Boolean(editId);
   const { register, handleSubmit, reset, getValues, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
-  const queryClient = useQueryClient();
-
   const { errors } = formState;
-  const { mutate, isLoading: isWorking } = useMutation({
-    mutationFn: ({ newCabin, id }) => createEditCabin(newCabin, id),
-    onSuccess: () => {
-      toast.success(`Cabin ${isEditSession ? 'edited' : 'created'} successfully`);
-      queryClient.invalidateQueries(["cabins"]);
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
+  const { createEditCabin, isWorking } = useCreateEditCabin(
+    reset,
+    isEditSession,
+    onClose
+  );
 
   function onSubmit(data) {
-    const image = typeof data.image === 'string' ? data.image : data.image[0];
-    mutate({ newCabin: { ...data, image }, id: editId });
+    const image = typeof data.image === "string" ? data.image : data.image[0];
+    createEditCabin({ newCabin: { ...data, image }, id: editId });
   }
 
   function onError(error) {
@@ -41,7 +33,10 @@ function CreateCabinForm({ cabinToEdit = {} }) {
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit, onError)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit, onError)}
+      type={onClose ? "modal" : ""}
+    >
       <FormRow label="Cabin Name" error={errors?.name?.message}>
         <Input
           type="text"
@@ -132,7 +127,12 @@ function CreateCabinForm({ cabinToEdit = {} }) {
       </FormRow>
 
       <FormRow>
-        <Button variation="secondary" type="reset" disabled={isWorking}>
+        <Button
+          variation="secondary"
+          type="reset"
+          disabled={isWorking}
+          onClick={() => onClose?.()}
+        >
           Cancel
         </Button>
         <Button disabled={isWorking}>
@@ -142,6 +142,5 @@ function CreateCabinForm({ cabinToEdit = {} }) {
     </Form>
   );
 }
-
 
 export default CreateCabinForm;

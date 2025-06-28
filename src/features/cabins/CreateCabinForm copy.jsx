@@ -12,21 +12,9 @@ import { createCabin } from "../../services/apiCabins";
 
 function CreateCabinForm() {
   const { register, handleSubmit, reset, getValues, formState } = useForm();
-  const queryClinet = useQueryClient();
-
+  
   const { errors } = formState;
-  const { mutate, isLoading: isCreating } = useMutation({
-    mutationFn: createCabin,
-    onSuccess: () => {
-      toast.success("New Cabin Created susccesfully");
-      queryClinet.invalidateQueries(["cabins"]);
-      reset();
-    },
-    onError: (err) => {
-      toast.error(err.message);
-    },
-  });
-
+  
   function onSubmit(data) {
     const image = data.image[0];
     mutate({ ...data, image });

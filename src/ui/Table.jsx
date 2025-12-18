@@ -62,42 +62,41 @@ const Empty = styled.p`
 
 const TableContext = createContext();
 
-function Table({ children, columns }) {
+function Table({ columns, children }) {
   return (
-    <TableContext.Provider value={columns}>
+    <TableContext.Provider value={{ columns }}>
       <StyledTable role="table">{children}</StyledTable>
     </TableContext.Provider>
   );
 }
 
 function Header({ children }) {
-  const columns = useContext(TableContext);
-
+  const { columns } = useContext(TableContext);
   return (
-    <StyledHeader role="row" columns={columns}>
+    <StyledHeader role="row" columns={columns} as="header">
       {children}
     </StyledHeader>
   );
 }
 function Row({ children }) {
-  const columns = useContext(TableContext);
-
+  const { columns } = useContext(TableContext);
   return (
     <StyledRow role="row" columns={columns}>
       {children}
     </StyledRow>
   );
 }
+
 function Body({ data, render }) {
-  if (!data) {
-    return <Empty >No data to show now</Empty>;
-  }
+  if (!data)
+     return <Empty>No data to show at the moment</Empty>;
+
   return <StyledBody>{data.map(render)}</StyledBody>;
 }
-// function Fotter({ children }) {}
 
 Table.Header = Header;
-Table.Row = Row;
 Table.Body = Body;
+Table.Row = Row;
+Table.Footer = Footer;
 
 export default Table;

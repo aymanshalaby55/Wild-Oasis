@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import { useState } from "react";
 import CreateCabinForm from "./CreateCabinForm";
 import useDeleteCabin from "./hooks/useDeleteCabin";
 import { useCreateEditCabin } from "./hooks/useCreateEditCabin";
-import { HiDocumentDuplicate, HiPencilAlt, HiTrash } from "react-icons/hi";
+import { HiTrash } from "react-icons/hi";
 import Modal from "../../ui/Modal";
 import ConfirmDelete from "../../ui/ConfirmDelete";
 import Table from "../../ui/Table";
@@ -60,7 +59,7 @@ function CabinRow({ cabin }) {
     discount,
   } = cabin;
   const { isDeleting, deleteCabin } = useDeleteCabin();
-  const { isWorking, createEditCabin } = useCreateEditCabin();
+  const {  createEditCabin } = useCreateEditCabin();
 
   function handleDuplicate() {
     createEditCabin({

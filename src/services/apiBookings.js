@@ -36,11 +36,16 @@ export async function getBookings({ filterValue, sortBy, page }) {
 
 export async function getBooking(id) {
   const { data, error } = await supabase
-    .from("bookings")
-    .select("*, cabins(*), guests(*)")
-    .eq("id", id)
-    .single();
+  .from("bookings")
+  .select(`
+    *,
+    cabins(*),
+    guests:guest_id(*)
+  `)
+  .eq("id", id)
+  .single();
 
+  console.log(data);
   if (error) {
     console.error(error);
     throw new Error("Booking not found");

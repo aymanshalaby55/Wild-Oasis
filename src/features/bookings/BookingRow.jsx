@@ -35,7 +35,6 @@ const Amount = styled.div`
   font-family: "Sono";
   font-weight: 500;
 `;
-
 function BookingRow({ booking }) {
   const {
     id: bookingId,
@@ -44,7 +43,7 @@ function BookingRow({ booking }) {
     totalPrice,
     status,
     cabins: { name: cabinName },
-    // guest: { email },
+    guests: { email },
   } = booking;
 
   const navigate = useNavigate();
@@ -57,9 +56,7 @@ function BookingRow({ booking }) {
     <Table.Row>
       <Cabin>{cabinName}</Cabin>
 
-      <Stacked>
-        {/* <span>{email}</span> */}
-      </Stacked>
+      <Stacked><span>{email}</span></Stacked>
 
       <Stacked>
         <span>
@@ -68,14 +65,26 @@ function BookingRow({ booking }) {
         </span>
       </Stacked>
 
-      <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+      <Tag type={statusToTagName[status]}>{status?.replace("-", " ")}</Tag>
 
       <Amount>{formatCurrency(totalPrice)}</Amount>
       <Menus.Menu>
         <Menus.Toggle id={bookingId} />
-        
         <Menus.List id={bookingId}>
-          <Menus.Button icon={<HiEye />} onClick={() => navigate(`/booking/${bookingId}`)}>See details</Menus.Button>
+          <Menus.Button
+            icon={<HiEye />}
+            onClick={() => navigate(`/bookings/${bookingId}`)}
+          >
+            See details
+          </Menus.Button>
+          {status === "unconfirmed" && (
+            <Menus.Button
+              icon={<HiEye />}
+              onClick={() => navigate(`/checkin/${bookingId}`)}
+            >
+              Check in
+            </Menus.Button>
+          )}
         </Menus.List>
       </Menus.Menu>
     </Table.Row>

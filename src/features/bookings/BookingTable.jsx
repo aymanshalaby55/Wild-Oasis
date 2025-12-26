@@ -1,11 +1,11 @@
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
-import { useBooking } from "./hooks/useBooking";
+import { useBookings } from "./hooks/useBookings";
 import Pagination from "../../ui/Pagination";
 
 function BookingTable() {
-  const { bookings, count } = useBooking();
+  const { bookings, count } = useBookings();
   console.log(bookings);
   return (
     <Menus>

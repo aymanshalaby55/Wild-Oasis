@@ -103,6 +103,8 @@ const Footer = styled.footer`
 
 // A purely presentational component
 function BookingDataBox({ booking }) {
+
+  console.log(booking);
   const {
     created_at,
     startDate,
@@ -116,7 +118,7 @@ function BookingDataBox({ booking }) {
     observations,
     isPaid,
     guests: { fullName: guestName, email, country, countryFlag, nationalID },
-    cabins: { name: cabinName },
+    cabins: { name: cabinName } ,
   } = booking;
 
   return (

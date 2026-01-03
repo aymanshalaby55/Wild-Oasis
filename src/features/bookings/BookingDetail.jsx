@@ -12,6 +12,7 @@ import { useMoveBack } from "../../hooks/useMoveBack";
 import { useBooking } from "./hooks/useBooking";
 import Spinner from "../../ui/Spinner";
 import { useNavigate } from "react-router-dom";
+import { HiEye } from "react-icons/hi2";
 
 const HeadingGroup = styled.div`
   display: flex;
@@ -21,7 +22,6 @@ const HeadingGroup = styled.div`
 
 function BookingDetail() {
   const { booking, isLoading, error } = useBooking();
-  const status = "checked-in";
   const navigate = useNavigate();
 
   const moveBack = useMoveBack();
@@ -30,6 +30,9 @@ function BookingDetail() {
   if (error) {
     return <Spinner />;
   }
+  
+  const { status } = booking;
+  
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -56,7 +59,7 @@ function BookingDetail() {
         {status === "unconfirmed" && (
           <Button
             icon={<HiEye />}
-            onClick={() => navigate(`/checkin/${bookingId}`)}
+            onClick={() => navigate(`/checkin/${booking.id}`)}
           >
             Check in
           </Button>

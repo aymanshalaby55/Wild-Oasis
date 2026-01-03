@@ -44,9 +44,10 @@ function Filter({ filterField, options = [] }) {
   function handleClick(value) {
     if (!options.length) return;
 
-    searchParams.set(filterField, value);
     if (value === options[0].value) {
       searchParams.delete(filterField);
+    } else {
+      searchParams.set(filterField, value);
     }
     setSearchParams(searchParams);
   }
